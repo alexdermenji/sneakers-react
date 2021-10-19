@@ -1,17 +1,18 @@
 import { useContext, useState } from "react";
-import appContext from "../context/context";
-import Info from "./Info";
+import { useCart } from "../../hooks/useCart";
+import appContext from "../../context/context";
+import styles from "./styles.module.scss";
+import Info from "../Info";
 import axios from "axios";
 const delay = () => new Promise((resolve) => setTimeout(resolve, 1000));
-function Drawer({ onRemove, items = [] }) {
+function Drawer({ onRemove, items = [], opened }) {
+  const { cartItems, setCartItems, totalPrice } = useCart();
+  const { setIsCartOpened } = useContext(appContext);
   const [isOrderCompleted, setIsOrderCompleted] = useState(false);
-  const { setIsCartOpened, setCartItems, cartItems } = useContext(appContext);
   const [orderId, setOrderId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const onOrderComplete = async () => {
     try {
-      setIsLoading(true);
       const { data } = await axios.post(
         "https://615ee75faf36590017204644.mockapi.io/orders",
         { items: cartItems }
@@ -31,11 +32,10 @@ function Drawer({ onRemove, items = [] }) {
     } catch (error) {
       console.log(error);
     }
-    setIsLoading(false);
   };
   return (
-    <div className="overlay">
-      <div className="drawer">
+    <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ""}`}>
+      <div className={styles.drawer}>
         <h2 className="mb-30 d-flex justify-between ">
           Basket
           <img
@@ -44,7 +44,7 @@ function Drawer({ onRemove, items = [] }) {
             }}
             className="removeBtn cu-p"
             src="/images/buttonRemove.svg"
-            alt=""
+            alt="close"
           />
         </h2>
         {!items.length ? (
@@ -96,12 +96,12 @@ function Drawer({ onRemove, items = [] }) {
                 <li className="d-flex">
                   <span>Total</span>
                   <div></div>
-                  <b>£240</b>
+                  <b>£{totalPrice}</b>
                 </li>
                 <li className="d-flex">
                   <span>Tax 5%</span>
                   <div></div>
-                  <b>£ 10</b>
+                  <b>£{(totalPrice / 100) * 5}</b>
                 </li>
               </ul>
               <button onClick={onOrderComplete} className="btnGreen">

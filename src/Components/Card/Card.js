@@ -8,20 +8,21 @@ function Card({
   name,
   image,
   price,
-  onPlus,
   onFavourite,
+  onAddToCart,
   favourite = false,
   isLoading,
 }) {
   const { isItemAdded } = useContext(appContext);
   const [isFavourite, setIsFavourite] = useState(favourite);
+  const obj = { id, parentId: id, name, image, price };
   const onClickFavourite = () => {
-    onFavourite({ id, name, image, price });
+    onFavourite(obj);
     setIsFavourite(!isFavourite);
   };
 
   const onClickPlus = () => {
-    onPlus();
+    onAddToCart(obj);
   };
   return (
     <div className={styles.card}>
@@ -42,15 +43,20 @@ function Card({
         </ContentLoader>
       ) : (
         <>
-          <div className={styles.favourite}>
-            <img
-              onClick={onClickFavourite}
-              src={
-                isFavourite ? "/images/heartRed.png" : "/images/heartWhite.svg"
-              }
-              alt="like"
-            />
-          </div>
+          {onFavourite && (
+            <div className={styles.favourite}>
+              <img
+                onClick={onClickFavourite}
+                src={
+                  isFavourite
+                    ? "/images/heartRed.png"
+                    : "/images/heartWhite.svg"
+                }
+                alt="like"
+              />
+            </div>
+          )}
+
           <img src={image} width={133} height={112} alt="" />
           <h5>{name}</h5>
           <div className="d-flex justify-between align-center">
@@ -58,14 +64,16 @@ function Card({
               <span>Price:</span>
               <b>£{price}</b>
             </div>
-            <img
-              className={styles.plus}
-              onClick={onClickPlus}
-              src={
-                isItemAdded(id) ? "images/arrowGreen.svg" : "images/plus.svg"
-              }
-              alt="add "
-            />
+            {onAddToCart && (
+              <img
+                className={styles.plus}
+                onClick={onClickPlus}
+                src={
+                  isItemAdded(id) ? "images/arrowGreen.svg" : "images/plus.svg"
+                }
+                alt="add "
+              />
+            )}
           </div>
         </>
       )}

@@ -14,16 +14,16 @@ function Home({
       isLoading
         ? [...Array(4)]
         : items.filter((item) => item.name.toLowerCase().includes(searchValue))
-    ).map((obj, index) => (
+    ).map((item, index) => (
       <Card
         isLoading={isLoading}
         key={index}
-        {...obj}
-        onPlus={() => {
-          onAddToCart(obj);
-        }}
-        onFavourite={() => {
+        {...item}
+        onFavourite={(obj) => {
           onAddToFavorites(obj);
+        }}
+        onAddToCart={(obj) => {
+          onAddToCart(obj);
         }}
       />
     ));
