@@ -8,11 +8,12 @@
 
 ReactJS, ContextAPI, Hooks, Routing, Data stored in [mockapi.io](https://mockapi.io)
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
+## Getting started
+ - Install dependencies
+   `npm install`
+ - Run project `npm start`
+ - Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 
 ## Functionality
